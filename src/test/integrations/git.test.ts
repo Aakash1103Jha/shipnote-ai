@@ -1,6 +1,6 @@
 import * as assert from 'assert';
 import * as vscode from 'vscode';
-import { GitService, CommitInfo, CommitRangeOptions } from '../git';
+import { GitService, CommitInfo, CommitRangeOptions } from '../../integrations/git';
 
 suite('GitService Tests', () => {
 	let gitService: GitService;

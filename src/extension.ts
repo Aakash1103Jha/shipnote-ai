@@ -1,9 +1,10 @@
 import * as vscode from 'vscode';
-import { GitService } from '@/git';
-import { OpenAIService } from '@/openai';
-import { ChangelogGenerator } from '@/changelog';
-import { ConfigService } from '@/config';
+import { GitService } from '@/integrations/git';
+import { OpenAIService } from '@/integrations/openai';
+import { ChangelogGenerator } from '@/core/changelog';
+import { ConfigService } from '@/config/config';
 import { ChangelogWebviewProvider } from '@/webview/ChangelogWebviewProvider';
+import { StyleRecommendationService } from '@/core/styleRecommendation';
 
 export function activate(context: vscode.ExtensionContext) {
 	console.log('ShipNote AI Changelog Generator is now active!');
@@ -13,6 +14,7 @@ export function activate(context: vscode.ExtensionContext) {
 	const configService = new ConfigService(context);
 	const openaiService = new OpenAIService(configService);
 	const changelogGenerator = new ChangelogGenerator(gitService, openaiService, configService);
+	const styleRecommendationService = new StyleRecommendationService(configService);
 
 	// Register webview provider
 	const changelogWebviewProvider = new ChangelogWebviewProvider(
@@ -363,23 +365,69 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	);
 
+	const getStyleRecommendationCommand = vscode.commands.registerCommand(
+		'shipnote-ai.getStyleRecommendation',
+		async () => {
+			try {
+				const workspaceFolders = vscode.workspace.workspaceFolders;
+				if (!workspaceFolders) {
+					vscode.window.showErrorMessage('No workspace folder found');
+					return;
+				}
+
+				const workspacePath = workspaceFolders[0].uri.fsPath;
+				
+				// Show progress
+				await vscode.window.withProgress({
+					location: vscode.ProgressLocation.Notification,
+					title: "Analyzing project for style recommendation...",
+					cancellable: false
+				}, async (progress) => {
+					progress.report({ increment: 30, message: "Analyzing package.json and project structure..." });
+					
+					const recommendation = await styleRecommendationService.getStyleRecommendation(workspacePath);
+					
+					progress.report({ increment: 70, message: "Generating recommendation..." });
+					
+					// Show recommendation dialog
+					const userChoice = await styleRecommendationService.showRecommendationDialog(recommendation);
+					
+					if (userChoice !== 'skip') {
+						await styleRecommendationService.applyRecommendation(userChoice);
+						vscode.window.showInformationMessage(
+							`Writing style updated to: ${userChoice}. You can change this anytime in settings.`
+						);
+					}
+				});
+			} catch (error) {
+				console.error('Error getting style recommendation:', error);
+				vscode.window.showErrorMessage(
+					`Failed to get style recommendation: ${error instanceof Error ? error.message : 'Unknown error'}`
+				);
+			}
+		}
+	);
+
 	// Register all commands
 	context.subscriptions.push(
 		generateChangelogCommand,
 		setOpenAIKeyCommand,
 		configureCommitRangeCommand,
-		openChangelogPanelCommand
+		openChangelogPanelCommand,
+		getStyleRecommendationCommand
 	);
 
 	// Show welcome message on first activation
 	const hasShownWelcome = context.globalState.get('hasShownWelcome', false);
 	if (!hasShownWelcome) {
 		vscode.window.showInformationMessage(
-			'Welcome to ShipNote AI Changelog Generator! Set your OpenAI API key to get started.',
-			'Set API Key'
+			'Welcome to ShipNote AI Changelog Generator! Let\'s get you set up.',
+			'Set API Key', 'Get Style Recommendation'
 		).then((selection) => {
 			if (selection === 'Set API Key') {
 				vscode.commands.executeCommand('shipnote-ai.setOpenAIKey');
+			} else if (selection === 'Get Style Recommendation') {
+				vscode.commands.executeCommand('shipnote-ai.getStyleRecommendation');
 			}
 		});
 		context.globalState.update('hasShownWelcome', true);

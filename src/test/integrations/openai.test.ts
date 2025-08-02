@@ -1,8 +1,8 @@
 import * as assert from 'assert';
 import * as vscode from 'vscode';
-import { OpenAIService, ChangelogEntry } from '../openai';
-import { ConfigService } from '../config';
-import { CommitInfo } from '../git';
+import { OpenAIService, ChangelogEntry } from '../../integrations/openai';
+import { ConfigService } from '../../config/config';
+import { CommitInfo } from '../../integrations/git';
 
 suite('OpenAIService Tests', () => {
 	let openaiService: OpenAIService;

@@ -45,6 +45,11 @@
         "command": "shipnote-ai.openChangelogPanel",
         "title": "Open Changelog Panel",
         "category": "ShipNote AI"
+      },
+      {
+        "command": "shipnote-ai.getStyleRecommendation",
+        "title": "Get Writing Style Recommendation",
+        "category": "ShipNote AI"
       }
     ],
     "configuration": {

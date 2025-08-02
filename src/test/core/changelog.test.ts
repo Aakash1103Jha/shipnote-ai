@@ -1,9 +1,9 @@
 import * as assert from 'assert';
 import * as vscode from 'vscode';
-import { ChangelogGenerator, GenerateOptions } from '../changelog';
-import { GitService, CommitInfo } from '../git';
-import { OpenAIService, ChangelogEntry } from '../openai';
-import { ConfigService } from '../config';
+import { ChangelogGenerator, GenerateOptions } from '../../core/changelog';
+import { GitService, CommitInfo } from '../../integrations/git';
+import { OpenAIService, ChangelogEntry } from '../../integrations/openai';
+import { ConfigService } from '../../config/config';
 
 suite('ChangelogGenerator Tests', () => {
 	let changelogGenerator: ChangelogGenerator;

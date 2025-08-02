@@ -1,6 +1,6 @@
 import OpenAI from 'openai';
-import { ConfigService } from '@/config';
-import { CommitInfo } from '@/git';
+import { ConfigService } from '../config/config';
+import { CommitInfo } from './git';
 
 export interface ChangelogEntry {
 	type: 'feat' | 'fix' | 'docs' | 'refactor' | 'style' | 'test' | 'chore';

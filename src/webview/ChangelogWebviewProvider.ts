@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
-import { ChangelogGenerator } from '@/changelog';
-import { ConfigService } from '@/config';
+import { ChangelogGenerator } from '@/core/changelog';
+import { ConfigService } from '@/config/config';
 
 export class ChangelogWebviewProvider implements vscode.WebviewViewProvider {
 	public static readonly viewType = 'shipnote-ai.changelogView';

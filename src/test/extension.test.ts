@@ -32,6 +32,15 @@ suite('Extension Test Suite', () => {
 		});
 	});
 
+	suite('Commands', () => {
+		test('should register style recommendation command', async () => {
+			// TODO: Implement - should register shipnote-ai.getStyleRecommendation command
+			const commands = await vscode.commands.getCommands(true);
+			const hasStyleCommand = commands.includes('shipnote-ai.getStyleRecommendation');
+			assert.ok(hasStyleCommand, 'Style recommendation command should be registered');
+		});
+	});
+
 	suite('File Operations', () => {
 		test('should insert changelog into existing CHANGELOG.md', async () => {
 			// TODO: Implement - should insert at correct position

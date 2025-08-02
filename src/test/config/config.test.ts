@@ -1,6 +1,6 @@
 import * as assert from 'assert';
 import * as vscode from 'vscode';
-import { ConfigService } from '../config';
+import { ConfigService } from '../../config/config';
 
 suite('ConfigService Tests', () => {
 	let configService: ConfigService;

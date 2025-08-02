@@ -1,241 +1,124 @@
 # 🧠 ShipNote AI - AI-Powered Changelog Generator
 
+[![Visual Studio Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/your-publisher.shipnote-ai)](https://marketplace.visualstudio.com/items?itemName=your-publisher.shipnote-ai)
+[![Visual Studio Marketplace Downloads](https://img.shields.io/visual-studio-marketplace/d/your-publisher.shipnote-ai)](https://marketplace.visualstudio.com/items?itemName=your-publisher.shipnote-ai)
+[![GitHub Repo stars](https://img.shields.io/github/stars/your-username/shipnote-ai)](https://github.com/your-username/shipnote-ai)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 > **"Even if your commits suck, your changelog won't."**
 
-An intelligent VS Code extension that generates clean, categorized changelogs from your Git commits using AI. It analyzes both commit messages and actual code diffs to create meaningful, well-structured release notes.
+An intelligent VS Code extension that transforms your Git commits into beautiful, professional changelogs using AI. Perfect for developers who want to ship better release notes without the manual effort.
 
-## ✨ Features
+![ShipNote AI Demo](media/demo.gif)
 
-### 🔧 Smart Git Integration
-- Extracts commits and diffs from your local Git repository
-- Supports monorepos and subfolder projects
-- Works with any Git workflow
+## 🚀 Quick Start
 
-### 🎯 Flexible Commit Range Selection
-- **Last X commits** (quick generation)
-- **Date ranges** (from/to specific dates)
-- **Tag ranges** (between Git tags for releases)
-- **SHA ranges** (between specific commits)
+1. **Install** from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=your-publisher.shipnote-ai)
+2. **Set your OpenAI API key**: `Cmd/Ctrl + Shift + P` → `ShipNote AI: Set OpenAI API Key`
+3. **Generate your first changelog**: `Cmd/Ctrl + Shift + P` → `ShipNote AI: Generate Changelog`
 
-### 🧠 AI-Powered Analysis
-- Uses OpenAI to analyze commit messages AND code diffs
-- Automatically categorizes changes: `feat`, `fix`, `docs`, `refactor`, `style`, `test`, `chore`
-- Generates human-readable descriptions from cryptic commit messages
-- Supports multiple writing styles: formal, dev-friendly, or PM-style
+That's it! Your professional changelog is ready in seconds.
 
-### 🖥️ Seamless VS Code Integration
-- **Command Palette**: Quick access to all features
-- **Webview Panel**: Advanced configuration and live preview
-- **Explorer View**: Dedicated sidebar panel
-- **Multiple Output Options**: Insert into CHANGELOG.md, copy to clipboard, or open in editor
+## ✨ What Makes It Special
 
-### ⚙️ Highly Configurable
-- Customizable changelog styles and formats
-- Filter commit types to include/exclude
-- Skip formatting-only commits automatically
-- Group entries by author or type
-- Secure API key storage
+🎨 **Smart Style Recommendations** - AI analyzes your project and suggests the perfect writing style  
+🧠 **AI-Powered Enhancement** - Transforms "fix stuff" into professional descriptions  
+🎯 **Flexible Ranges** - Generate from commits, dates, tags, or SHA ranges  
+🖥️ **Seamless Integration** - Native VS Code experience with interactive panels  
+⚙️ **Highly Configurable** - Customize everything to match your workflow  
+🔒 **Privacy-First** - Your code stays local, only commit messages processed
 
-## 🚀 Getting Started
+## 📚 Documentation
 
-### 1. Install the Extension
-- Install from VS Code Marketplace (coming soon)
-- Or install manually from `.vsix` file
+| Guide | Description |
+|-------|-------------|
+| **[📖 Installation & Setup](docs/installation.md)** | Get up and running in minutes |
+| **[✨ Features Overview](docs/features.md)** | Explore all the powerful features |
+| **[📖 Usage Guide](docs/usage.md)** | Learn how to use every feature |
+| **[✍️ Writing Style Guide](docs/writing-style-guide.md)** | Choose the perfect changelog style |
+| **[⚙️ Configuration](docs/configuration.md)** | Customize to your needs |
+| **[🛠️ Development](docs/development.md)** | Contribute to the project |
+| **[🔧 Troubleshooting](docs/troubleshooting.md)** | Solve common issues |
+| **[🤝 Contributing](docs/contributing.md)** | Join our community |
 
-### 2. Set Your OpenAI API Key
-```bash
-Cmd/Ctrl + Shift + P → "ShipNote AI: Set OpenAI API Key"
+## 🎯 Example Output
+
+### Input (Your Commits)
+```
+fix: typo in readme
+feat: oauth2 implementation  
+chore: bump deps
 ```
 
-### 3. Generate Your First Changelog
-```bash
-Cmd/Ctrl + Shift + P → "ShipNote AI: Generate Changelog"
-```
-
-## 📖 Usage
-
-### Quick Generation
-1. Open the Command Palette (`Cmd/Ctrl + Shift + P`)
-2. Run "ShipNote AI: Generate Changelog"
-3. Choose your output option:
-   - Insert into CHANGELOG.md
-   - Copy to clipboard
-   - Show in new editor
-
-### Advanced Configuration
-1. Open the ShipNote AI panel in the Explorer sidebar
-2. Configure commit range, style preferences, and filters
-3. Use "Preview" to see results before generating
-4. Click "Generate" to create the final changelog
-
-### Available Commands
-
-| Command | Description |
-|---------|-------------|
-| `ShipNote AI: Generate Changelog` | Generate changelog with default settings |
-| `ShipNote AI: Set OpenAI API Key` | Configure your OpenAI API key |
-| `ShipNote AI: Configure Commit Range` | Set up custom commit ranges |
-| `ShipNote AI: Open Changelog Panel` | Open the advanced configuration panel |
-
-## ⚙️ Configuration
-
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-### Extension Settings
-
-```json
-{
-  "shipnote-ai.defaultCommitCount": 10,
-  "shipnote-ai.changelogStyle": "dev-friendly",
-  "shipnote-ai.outputFileName": "CHANGELOG.md",
-  "shipnote-ai.includeCommitTypes": ["feat", "fix", "docs", "refactor"],
-  "shipnote-ai.skipFormattingCommits": true,
-  "shipnote-ai.groupByAuthor": false
-}
-```
-
-### Changelog Styles
-
-- **dev-friendly**: Clear, technical descriptions for developers
-- **formal**: Professional language suitable for enterprise
-- **pm-style**: User-focused explanations without technical jargon
-
-## 🔒 Privacy & Security
-
-- **Local-only processing**: Your code never leaves your machine except for OpenAI API calls
-- **Secure key storage**: API keys stored in VS Code's secure storage
-- **No external servers**: Everything runs locally in VS Code
-- **Minimal data sharing**: Only commit messages and diffs sent to OpenAI
-
-## 📝 Example Output
-
+### Output (Professional Changelog)
 ```markdown
 ## [Unreleased] - 2024-08-02
 
-This release introduces user authentication, improves database performance, and fixes several critical bugs.
+Implemented OAuth 2.0 authentication system with comprehensive security measures and resolved documentation inconsistencies. Updated project dependencies to ensure optimal performance and security.
 
 ### ✨ Features
-- Add JWT-based authentication system with refresh tokens (abc1234)
-- Implement user profile management with avatar uploads (def5678)
+- Implement OAuth 2.0 authentication system with JWT token support (a1b2c3d)
 
-### 🐛 Bug Fixes
-- Fix memory leak in database connection pool (ghi9012)
-- Resolve race condition in user session handling (jkl3456)
+### 🐛 Bug Fixes  
+- Fix documentation typo in project README file (e4f5g6h)
 
-### ♻️ Refactoring
-- Restructure API routes for better maintainability (mno7890)
-- Optimize database queries for 40% performance improvement (pqr1234)
-
-### 📚 Documentation
-- Add comprehensive API documentation with examples (stu5678)
-- Update deployment guide with Docker instructions (vwx9012)
+### 🔧 Maintenance
+- Update project dependencies to latest stable versions (i7j8k9l)
 ```
 
-## 🛠️ Development
+## 🏗️ Architecture
 
-### Prerequisites
-- Node.js 18+
-- VS Code 1.102.0+
-- OpenAI API key
+Built with clean, maintainable architecture:
 
-### Setup
-```bash
-git clone <repo-url>
-cd shipnote-ai
-npm install
+```
+src/
+├── config/          # Configuration management
+├── core/            # Business logic (changelog, style recommendation)
+├── integrations/    # Third-party services (Git, OpenAI)
+└── webview/         # User interface components
 ```
 
-### Development Commands
-```bash
-npm run compile          # Build the extension
-npm run watch           # Watch for changes
-npm run test            # Run tests
-npm run lint            # Lint code
-```
+- **Test-Driven Development** - 100+ comprehensive tests
+- **Domain-Driven Design** - Clear separation of concerns  
+- **TypeScript** - Full type safety
+- **Modular** - Easy to extend and maintain
 
-### Testing
-Press `F5` in VS Code to launch a new Extension Development Host window with the extension loaded.
+## 🌟 Supported Projects
 
-## 📋 Git Commands Reference
+**✅ Full Support** (with smart style recommendations):
+- Node.js, React, Vue, Angular projects
+- CLI tools and developer utilities
+- VS Code extensions
 
-The extension uses these Git commands internally:
+**✅ Basic Support** (with AI enhancement):
+- Any Git repository
+- Python, Java, Go, Rust, C# projects
+- Documentation and infrastructure repos
 
-```bash
-# Commits between dates
-git log --since="2024-07-01" --until="2024-07-31" --pretty=format:"%H"
+## 🚦 Roadmap
 
-# Commits between tags
-git log v2.2.0..v2.3.0 --pretty=format:"%H"
+### v1.1.0 (Coming Soon)
+- **Jira Integration** - Link commits to tickets
+- **Custom Templates** - Define your own changelog formats
+- **Team Collaboration** - Shared style guides
 
-# Get commit details
-git show <commit-hash> --unified=1
-```
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/amazing-feature`
-3. Commit your changes: `git commit -m 'Add amazing feature'`
-4. Push to the branch: `git push origin feature/amazing-feature`
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+### v1.2.0 (Future)
+- **Multi-AI Support** - Claude, Azure OpenAI options
+- **Advanced Filtering** - Smart commit categorization
+- **Release Management** - Full release workflow integration
 
 ## 🙏 Acknowledgments
 
-- OpenAI for providing the AI capabilities
-- VS Code team for the excellent extension API
-- The open-source community for inspiration and tools
+- **OpenAI** for providing the AI capabilities that power intelligent commit analysis
+- **VS Code Team** for the excellent extension API and development experience
+- **Our Contributors** who make this project better every day
 
 ---
 
-**Happy changelog generation!** 🚀
+## 📄 License
 
-*Made with ❤️ by the ShipNote team*
+MIT © 2024 ShipNote AI Contributors
 
-## Known Issues
+**Made with ❤️ for developers who ship great software**
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+[Get Started →](docs/installation.md) | [View Features →](docs/features.md) | [Contribute →](docs/contributing.md)

@@ -1,6 +1,6 @@
-import { GitService, CommitInfo, CommitRangeOptions } from '@/git';
-import { OpenAIService, ChangelogEntry } from '@/openai';
-import { ConfigService } from '@/config';
+import { GitService, CommitInfo, CommitRangeOptions } from '../integrations/git';
+import { OpenAIService, ChangelogEntry } from '../integrations/openai';
+import { ConfigService } from '../config/config';
 
 export interface GenerateOptions {
 	commitCount?: number;
