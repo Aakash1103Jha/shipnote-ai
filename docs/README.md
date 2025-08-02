@@ -6,23 +6,24 @@ Welcome to the complete documentation for ShipNote AI! Here you'll find everythi
 
 | Document | Description | Best For |
 |----------|-------------|----------|
-| **[📖 Installation & Setup](installation.md)** | Step-by-step installation guide | New users |
-| **[📖 Usage Guide](usage.md)** | Complete usage instructions | Learning the features |
-| **[✨ Features Overview](features.md)** | Detailed feature descriptions | Understanding capabilities |
-| **[✍️ Writing Style Guide](writing-style-guide.md)** | Choose the perfect changelog style | Content creators |
+| **[📖 Installation & Setup](guides/installation.md)** | Step-by-step installation guide | New users |
+| **[📖 Usage Guide](guides/usage.md)** | Complete usage instructions | Learning the features |
+| **[✨ Features Overview](guides/features.md)** | Detailed feature descriptions | Understanding capabilities |
+| **[🌿 Branch Comparison](features/branch-comparison.md)** | Compare branches and generate changelogs | Feature branch workflows |
+| **[✍️ Writing Style Guide](features/writing-style-guide.md)** | Choose the perfect changelog style | Content creators |
 
 ## ⚙️ Configuration & Customization
 
 | Document | Description | Best For |
 |----------|-------------|----------|
-| **[⚙️ Configuration](configuration.md)** | Settings and customization options | Power users |
-| **[🔧 Troubleshooting](troubleshooting.md)** | Common issues and solutions | Problem solving |
+| **[⚙️ Configuration](guides/configuration.md)** | Settings and customization options | Power users |
+| **[🔧 Troubleshooting](guides/troubleshooting.md)** | Common issues and solutions | Problem solving |
 
 ## 🛠️ Development & Contributing
 
 | Document | Description | Best For |
 |----------|-------------|----------|
-| **[🛠️ Development](development.md)** | Development setup and architecture | Contributors |
+| **[🛠️ Development](guides/development.md)** | Development setup and architecture | Contributors |
 | **[🤝 Contributing](../CONTRIBUTING.md)** | How to contribute to the project | Open source contributors |
 
 ## 📖 Quick Reference
@@ -32,13 +33,16 @@ Welcome to the complete documentation for ShipNote AI! Here you'll find everythi
 - `ShipNote AI: Set OpenAI API Key` - Configure API key
 - `ShipNote AI: Get Writing Style Recommendation` - Get AI style suggestion
 - `ShipNote AI: Open Changelog Panel` - Open interactive panel
+- `ShipNote AI: Compare Branches` - Interactive branch comparison
+- `ShipNote AI: Compare Current Branch to Master` - Quick branch comparison
+- `ShipNote AI: Generate PR Changelog` - Pull request changelogs
 
 ### Writing Styles
 - **Formal** - Enterprise/compliance projects
 - **Dev-Friendly** - Technical/developer tools  
 - **PM-Style** - User-facing products
 
-> 📚 **For detailed examples**: See our **[Writing Style Guide](writing-style-guide.md)**
+> 📚 **For detailed examples**: See our **[Writing Style Guide](features/writing-style-guide.md)**
 
 ### Supported Ranges
 - Last X commits
@@ -48,7 +52,7 @@ Welcome to the complete documentation for ShipNote AI! Here you'll find everythi
 
 ## 🆘 Need Help?
 
-1. Check the **[Troubleshooting Guide](troubleshooting.md)** for common issues
+1. Check the **[Troubleshooting Guide](guides/troubleshooting.md)** for common issues
 2. Search existing **[GitHub Issues](https://github.com/your-username/shipnote-ai/issues)**
 3. Ask questions in **[GitHub Discussions](https://github.com/your-username/shipnote-ai/discussions)**
 4. Create a new issue if you found a bug
