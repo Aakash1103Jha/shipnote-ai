@@ -2,15 +2,29 @@
 
 ## Installation
 
-1. **Install the extension** from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=your-publisher.shipnote-ai)
-2. **Set your OpenAI API key**: `Cmd/Ctrl + Shift + P` → `ShipNote AI: Set OpenAI API Key`
-3. **Generate your first changelog**: `Cmd/Ctrl + Shift + P` → `ShipNote AI: Generate Changelog`
+### Method 1: VS Code Marketplace (Recommended)
+1. Open VS Code
+2. Go to Extensions (`Cmd/Ctrl + Shift + X`)
+3. Search for "ShipNote AI"
+4. Click Install
+
+### Method 2: Direct Link
+- Install from [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=thedevcirclespace.shipnote-ai)
+
+### Method 3: Command Line
+```bash
+code --install-extension thedevcirclespace.shipnote-ai
+```
+
+## Quick Setup
+1. **Set your OpenAI API key**: `Cmd/Ctrl + Shift + P` → `ShipNote AI: Set OpenAI API Key`
+2. **Generate your first changelog**: `Cmd/Ctrl + Shift + P` → `ShipNote AI: Generate Changelog`
 
 That's it! Your professional changelog is ready in seconds.
 
 ## Prerequisites
 
-- **VS Code**: Version 1.60.0 or higher
+- **VS Code**: Version 1.102.0 or higher
 - **OpenAI API Key**: You'll need an OpenAI API key to use the AI features
 - **Git Repository**: The extension works with Git repositories
 

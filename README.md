@@ -1,21 +1,33 @@
 # 🧠 ShipNote AI - AI-Powered Changelog Generator
 
-[![Visual Studio Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/your-publisher.shipnote-ai)](https://marketplace.visualstudio.com/items?itemName=your-publisher.shipnote-ai)
-[![Visual Studio Marketplace Downloads](https://img.shields.io/visual-studio-marketplace/d/your-publisher.shipnote-ai)](https://marketplace.visualstudio.com/items?itemName=your-publisher.shipnote-ai)
-[![GitHub Repo stars](https://img.shields.io/github/stars/your-username/shipnote-ai)](https://github.com/your-username/shipnote-ai)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Visual Studio Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/thedevcirclespace.shipnote-ai)](https://marketplace.visualstudio.com/items?itemName=thedevcirclespace.shipnote-ai)
+[![Visual Studio Marketplace Downloads](https://img.shields.io/visual-studio-marketplace/d/thedevcirclespace.shipnote-ai)](https://marketplace.visualstudio.com/items?itemName=thedevcirclespace.shipnote-ai)
 
 > **"Even if your commits suck, your changelog won't."**
 
 An intelligent VS Code extension that transforms your Git commits into beautiful, professional changelogs using AI. Perfect for developers who want to ship better release notes without the manual effort.
 
-![ShipNote AI Demo](media/demo.gif)
-
 ## 🚀 Quick Start
 
-1. **Install** from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=your-publisher.shipnote-ai)
-2. **Set your OpenAI API key**: `Cmd/Ctrl + Shift + P` → `ShipNote AI: Set OpenAI API Key`
-3. **Generate your first changelog**: `Cmd/Ctrl + Shift + P` → `ShipNote AI: Generate Changelog`
+### 📦 Installation
+
+**Option 1: VS Code Marketplace (Recommended)**
+1. Open VS Code
+2. Go to Extensions (`Cmd/Ctrl + Shift + X`)
+3. Search for "ShipNote AI"
+4. Click Install
+
+**Option 2: Direct Link**
+- Install from [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=thedevcirclespace.shipnote-ai)
+
+**Option 3: Command Line**
+```bash
+code --install-extension thedevcirclespace.shipnote-ai
+```
+
+### ⚡ Quick Setup
+1. **Set your OpenAI API key**: `Cmd/Ctrl + Shift + P` → `ShipNote AI: Set OpenAI API Key`
+2. **Generate your first changelog**: `Cmd/Ctrl + Shift + P` → `ShipNote AI: Generate Changelog`
 
 That's it! Your professional changelog is ready in seconds.
 
@@ -95,30 +107,11 @@ src/
 - Python, Java, Go, Rust, C# projects
 - Documentation and infrastructure repos
 
-## 🚦 Roadmap
-
-### v1.1.0 (Coming Soon)
-- **Jira Integration** - Link commits to tickets
-- **Custom Templates** - Define your own changelog formats
-- **Team Collaboration** - Shared style guides
-
-### v1.2.0 (Future)
-- **Multi-AI Support** - Claude, Azure OpenAI options
-- **Advanced Filtering** - Smart commit categorization
-- **Release Management** - Full release workflow integration
-
 ## 🙏 Acknowledgments
 
 - **OpenAI** for providing the AI capabilities that power intelligent commit analysis
 - **VS Code Team** for the excellent extension API and development experience
-- **Our Contributors** who make this project better every day
-
----
-
-## 📄 License
-
-MIT © 2024 ShipNote AI Contributors
 
 **Made with ❤️ for developers who ship great software**
 
-[Get Started →](docs/installation.md) | [View Features →](docs/features.md) | [Contribute →](docs/contributing.md)
+[Get Started →](docs/installation.md) | [View Features →](docs/features.md)

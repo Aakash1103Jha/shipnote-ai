@@ -1,8 +1,9 @@
 {
   "name": "shipnote-ai",
-  "displayName": "AI Changelog Generator",
+  "displayName": "ShipNote AI",
   "description": "AI-powered changelog generator that creates clean, categorized changelogs from Git commits and diffs",
-  "version": "0.0.1",
+  "icon": "icon.png",
+  "version": "1.0.1",
   "engines": {
     "vscode": "^1.102.0"
   },
@@ -17,10 +18,15 @@
     "release",
     "openai"
   ],
-  "publisher": "shipnote",
+  "publisher": "thedevcirclespace",
+  "license": "MIT",
+  "homepage": "https://github.com/Aakash1103Jha/shipnote-ai.git#readme",
+  "bugs": {
+    "url": "https://github.com/Aakash1103Jha/shipnote-ai.git/issues"
+  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/shipnote/ai-changelog-generator"
+    "url": "https://github.com/Aakash1103Jha/shipnote-ai.git"
   },
   "activationEvents": [],
   "main": "./dist/extension.js",
