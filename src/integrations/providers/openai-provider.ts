@@ -1,6 +1,7 @@
 import OpenAI from 'openai';
 import { BaseAIProvider } from './base-provider';
 import { AIProviderConfig, ChangelogEntry, CommitInfo, UsageStats } from './types';
+import { sanitizeErrorMessage } from './error-sanitizer';
 
 export class OpenAIProvider extends BaseAIProvider {
 	readonly name = 'OpenAI';
@@ -60,7 +61,8 @@ export class OpenAIProvider extends BaseAIProvider {
 
 			return this.parseAIResponse(content, commit);
 		} catch (error) {
-			console.error('OpenAI API error:', error);
+			const sanitizedError = sanitizeErrorMessage(String(error));
+			console.error('OpenAI API error:', sanitizedError);
 			return this.fallbackProcessCommit(commit);
 		}
 	}
@@ -110,7 +112,8 @@ Write a 1-2 sentence summary that highlights the most important changes.`;
 
 			return response.choices[0]?.message?.content?.trim() || super.generateSummary(entries);
 		} catch (error) {
-			console.error('Failed to generate summary:', error);
+			const sanitizedError = sanitizeErrorMessage(String(error));
+			console.error('Failed to generate summary:', sanitizedError);
 			return super.generateSummary(entries);
 		}
 	}
@@ -167,7 +170,8 @@ Category:`;
 			
 			return validTypes.includes(category as any) ? category as ChangelogEntry['type'] : super.categorizeCommit(commit);
 		} catch (error) {
-			console.error('Failed to categorize commit:', error);
+			const sanitizedError = sanitizeErrorMessage(String(error));
+			console.error('Failed to categorize commit:', sanitizedError);
 			return super.categorizeCommit(commit);
 		}
 	}
@@ -224,7 +228,8 @@ Enhanced description:`;
 			const enhanced = response.choices[0]?.message?.content?.trim();
 			return enhanced && enhanced.length > 0 ? enhanced : super.enhanceDescription(commit);
 		} catch (error) {
-			console.error('Failed to enhance description:', error);
+			const sanitizedError = sanitizeErrorMessage(String(error));
+			console.error('Failed to enhance description:', sanitizedError);
 			return super.enhanceDescription(commit);
 		}
 	}

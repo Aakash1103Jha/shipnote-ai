@@ -1,5 +1,6 @@
 import { BaseAIProvider } from './base-provider';
 import { AIProviderConfig, ChangelogEntry, CommitInfo, UsageStats } from './types';
+import { sanitizeErrorMessage } from './error-sanitizer';
 
 // Anthropic Claude API types (simplified)
 interface AnthropicMessage {
@@ -200,7 +201,8 @@ Enhanced description:`;
 
 		if (!response.ok) {
 			const errorText = await response.text();
-			throw new Error(`Anthropic API error: ${response.status} ${errorText}`);
+			const sanitizedError = sanitizeErrorMessage(errorText);
+			throw new Error(`Anthropic API error: ${response.status} ${sanitizedError}`);
 		}
 
 		const result = await response.json() as AnthropicResponse;

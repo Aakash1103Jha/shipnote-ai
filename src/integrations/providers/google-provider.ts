@@ -1,5 +1,6 @@
 import { BaseAIProvider } from './base-provider';
 import { AIProviderConfig, ChangelogEntry, CommitInfo, UsageStats } from './types';
+import { sanitizeErrorMessage } from './error-sanitizer';
 
 // Google Gemini API types (simplified)
 interface GeminiContent {
@@ -213,7 +214,8 @@ Enhanced description:`;
 
 		if (!response.ok) {
 			const errorText = await response.text();
-			throw new Error(`Google Gemini API error: ${response.status} ${errorText}`);
+			const sanitizedError = sanitizeErrorMessage(errorText);
+			throw new Error(`Google Gemini API error: ${response.status} ${sanitizedError}`);
 		}
 
 		const result = await response.json() as GeminiResponse;
