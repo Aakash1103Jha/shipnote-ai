@@ -11,7 +11,10 @@ Customize ShipNote AI through VS Code settings:
   "shipnote-ai.outputFileName": "CHANGELOG.md",
   "shipnote-ai.includeCommitTypes": ["feat", "fix", "docs", "refactor"],
   "shipnote-ai.skipFormattingCommits": true,
-  "shipnote-ai.groupByAuthor": false
+  "shipnote-ai.groupByAuthor": false,
+  "shipnote-ai.defaultComparisonStrategy": "one-way",
+  "shipnote-ai.includeMergeCommits": false,
+  "shipnote-ai.defaultBaseBranch": "master"
 }
 ```
 
@@ -25,6 +28,9 @@ Customize ShipNote AI through VS Code settings:
 | `includeCommitTypes` | `["feat", "fix", "docs", "refactor"]` | Commit types to include in changelog |
 | `skipFormattingCommits` | `true` | Skip commits that only change formatting/whitespace |
 | `groupByAuthor` | `false` | Group changelog entries by commit author |
+| `defaultComparisonStrategy` | `"one-way"` | Default strategy for branch comparison: `one-way`, `symmetric`, or `merge-base` |
+| `includeMergeCommits` | `false` | Include merge commits in branch comparisons |
+| `defaultBaseBranch` | `"master"` | Default base branch for comparisons (master, main, develop, etc.) |
 
 ## Accessing Settings
 
@@ -52,7 +58,7 @@ This analyzes your:
 - File patterns and project structure
 - Commit history patterns
 
-> 📚 **For detailed style examples**: See our complete **[Writing Style Guide](writing-style-guide.md)** with examples and best practices.
+> 📚 **For detailed style examples**: See our complete **[Writing Style Guide](../features/writing-style-guide.md)** with examples and best practices.
 
 ### Manual Style Selection
 You can also manually set your preferred style:
@@ -91,6 +97,24 @@ Configure where and how changelogs are generated:
   "shipnote-ai.groupByAuthor": true
 }
 ```
+
+### Branch Comparison Settings
+Customize branch comparison behavior:
+
+```json
+{
+  "shipnote-ai.defaultComparisonStrategy": "one-way",
+  "shipnote-ai.includeMergeCommits": false,
+  "shipnote-ai.defaultBaseBranch": "main"
+}
+```
+
+**Comparison Strategies:**
+- **`one-way`** - Show commits in target branch that are not in base branch
+- **`symmetric`** - Show commits unique to both branches since they diverged  
+- **`merge-base`** - Show all commits since the common ancestor
+
+> 🌿 **Learn more**: See the **[Branch Comparison Guide](../features/branch-comparison.md)** for detailed usage examples.
 
 ## 🔒 Privacy & Security
 

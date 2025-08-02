@@ -19,6 +19,24 @@ export interface CommitRangeOptions {
 	toTag?: string;
 	fromSHA?: string;
 	toSHA?: string;
+	fromBranch?: string;
+	toBranch?: string;
+}
+
+export interface BranchInfo {
+	name: string;
+	isRemote: boolean;
+	lastCommit?: CommitInfo;
+	ahead?: number;
+	behind?: number;
+}
+
+export interface BranchComparisonOptions {
+	fromBranch: string;
+	toBranch: string;
+	includeUnmerged?: boolean;
+	includeMergeCommits?: boolean;
+	strategy?: 'commits' | 'merge-base' | 'one-way' | 'symmetric';
 }
 
 export class GitService {
@@ -128,6 +146,8 @@ export class GitService {
 			command += ` --since="${options.fromDate}" --until="${options.toDate}"`;
 		} else if (options.fromDate) {
 			command += ` --since="${options.fromDate}"`;
+		} else if (options.fromBranch && options.toBranch) {
+			command += ` ${options.fromBranch}..${options.toBranch}`;
 		} else if (options.fromTag && options.toTag) {
 			command += ` ${options.fromTag}..${options.toTag}`;
 		} else if (options.fromSHA && options.toSHA) {
@@ -237,5 +257,152 @@ export class GitService {
 
 		// Default category
 		return 'chore';
+	}
+
+	/**
+	 * Get all available branches (local and remote)
+	 */
+	async getBranches(workspacePath: string): Promise<BranchInfo[]> {
+		try {
+			const branches: BranchInfo[] = [];
+
+			// Get local branches
+			const localCmd = 'git branch --format="%(refname:short)|%(objectname:short)|%(committerdate:iso8601)"';
+			const { stdout: localOutput } = await execAsync(localCmd, { cwd: workspacePath });
+			
+			for (const line of localOutput.trim().split('\n').filter(Boolean)) {
+				const [name, hash, date] = line.split('|');
+				if (name && hash) {
+					const lastCommit = await this.getCommitInfo(workspacePath, hash);
+					branches.push({
+						name: name.replace('* ', ''), // Remove current branch indicator
+						isRemote: false,
+						lastCommit: lastCommit || undefined
+					});
+				}
+			}
+
+			// Get remote branches
+			try {
+				const remoteCmd = 'git branch -r --format="%(refname:short)|%(objectname:short)|%(committerdate:iso8601)"';
+				const { stdout: remoteOutput } = await execAsync(remoteCmd, { cwd: workspacePath });
+				
+				for (const line of remoteOutput.trim().split('\n').filter(Boolean)) {
+					const [name, hash, date] = line.split('|');
+					if (name && hash && !name.includes('HEAD')) {
+						const lastCommit = await this.getCommitInfo(workspacePath, hash);
+						branches.push({
+							name,
+							isRemote: true,
+							lastCommit: lastCommit || undefined
+						});
+					}
+				}
+			} catch (error) {
+				// Remote branches might not exist, that's okay
+				console.warn('No remote branches found or error fetching remotes:', error);
+			}
+
+			return branches;
+		} catch (error) {
+			throw new Error(`Failed to get branches: ${error instanceof Error ? error.message : 'Unknown error'}`);
+		}
+	}
+
+	/**
+	 * Check if a branch exists
+	 */
+	async branchExists(workspacePath: string, branchName: string): Promise<boolean> {
+		try {
+			await execAsync(`git show-ref --verify --quiet refs/heads/${branchName}`, { cwd: workspacePath });
+			return true;
+		} catch {
+			// Try remote branch
+			try {
+				await execAsync(`git show-ref --verify --quiet refs/remotes/${branchName}`, { cwd: workspacePath });
+				return true;
+			} catch {
+				return false;
+			}
+		}
+	}
+
+	/**
+	 * Get the merge base (common ancestor) between two branches
+	 */
+	async getMergeBase(workspacePath: string, branch1: string, branch2: string): Promise<string> {
+		try {
+			const { stdout } = await execAsync(`git merge-base ${branch1} ${branch2}`, { cwd: workspacePath });
+			return stdout.trim();
+		} catch (error) {
+			throw new Error(`Failed to find merge base between ${branch1} and ${branch2}: ${error instanceof Error ? error.message : 'Unknown error'}`);
+		}
+	}
+
+	/**
+	 * Get commits between two branches
+	 */
+	async getCommitsBetweenBranches(
+		workspacePath: string,
+		fromBranch: string,
+		toBranch: string,
+		options?: BranchComparisonOptions
+	): Promise<CommitInfo[]> {
+		try {
+			// Validate branches exist
+			const fromExists = await this.branchExists(workspacePath, fromBranch);
+			const toExists = await this.branchExists(workspacePath, toBranch);
+			
+			if (!fromExists) {
+				throw new Error(`Branch '${fromBranch}' does not exist`);
+			}
+			if (!toExists) {
+				throw new Error(`Branch '${toBranch}' does not exist`);
+			}
+
+			let gitCommand = '';
+			const strategy = options?.strategy || 'one-way';
+
+			switch (strategy) {
+				case 'symmetric':
+					// Show commits in either branch since they diverged
+					gitCommand = `git log --pretty=format:"%H" ${fromBranch}...${toBranch}`;
+					break;
+				case 'merge-base':
+					// Show commits from merge base to target branch
+					const mergeBase = await this.getMergeBase(workspacePath, fromBranch, toBranch);
+					gitCommand = `git log --pretty=format:"%H" ${mergeBase}..${toBranch}`;
+					break;
+				case 'one-way':
+				default:
+					// Show commits in toBranch that are not in fromBranch
+					gitCommand = `git log --pretty=format:"%H" ${fromBranch}..${toBranch}`;
+					break;
+			}
+
+			// Add merge commit handling
+			if (options?.includeMergeCommits === false) {
+				gitCommand += ' --no-merges';
+			}
+
+			const { stdout } = await execAsync(gitCommand, { cwd: workspacePath });
+			const commitHashes = stdout.trim().split('\n').filter(Boolean);
+
+			const commits: CommitInfo[] = [];
+			for (const hash of commitHashes) {
+				const commitInfo = await this.getCommitInfo(workspacePath, hash);
+				if (commitInfo) {
+					// Additional filtering for merge commits if needed
+					if (options?.includeMergeCommits === false && commitInfo.message.startsWith('Merge')) {
+						continue;
+					}
+					commits.push(commitInfo);
+				}
+			}
+
+			return commits;
+		} catch (error) {
+			throw new Error(`Failed to get commits between branches ${fromBranch} and ${toBranch}: ${error instanceof Error ? error.message : 'Unknown error'}`);
+		}
 	}
 }

@@ -44,14 +44,15 @@ That's it! Your professional changelog is ready in seconds.
 
 | Guide | Description |
 |-------|-------------|
-| **[📖 Installation & Setup](docs/installation.md)** | Get up and running in minutes |
-| **[✨ Features Overview](docs/features.md)** | Explore all the powerful features |
-| **[📖 Usage Guide](docs/usage.md)** | Learn how to use every feature |
-| **[✍️ Writing Style Guide](docs/writing-style-guide.md)** | Choose the perfect changelog style |
-| **[⚙️ Configuration](docs/configuration.md)** | Customize to your needs |
-| **[🛠️ Development](docs/development.md)** | Contribute to the project |
-| **[🔧 Troubleshooting](docs/troubleshooting.md)** | Solve common issues |
-| **[🤝 Contributing](docs/contributing.md)** | Join our community |
+| **[📖 Installation & Setup](docs/guides/installation.md)** | Get up and running in minutes |
+| **[✨ Features Overview](docs/guides/features.md)** | Explore all the powerful features |
+| **[📖 Usage Guide](docs/guides/usage.md)** | Learn how to use every feature |
+| **[🌿 Branch Comparison](docs/features/branch-comparison.md)** | Compare branches and generate changelogs |
+| **[✍️ Writing Style Guide](docs/features/writing-style-guide.md)** | Choose the perfect changelog style |
+| **[⚙️ Configuration](docs/guides/configuration.md)** | Customize to your needs |
+| **[🛠️ Development](docs/guides/development.md)** | Contribute to the project |
+| **[🔧 Troubleshooting](docs/guides/troubleshooting.md)** | Solve common issues |
+| **[🤝 Contributing](CONTRIBUTING.md)** | Join our community |
 
 ## 🎯 Example Output
 
@@ -114,4 +115,4 @@ src/
 
 **Made with ❤️ for developers who ship great software**
 
-[Get Started →](docs/installation.md) | [View Features →](docs/features.md)
+[Get Started →](docs/guides/installation.md) | [View Features →](docs/guides/features.md)

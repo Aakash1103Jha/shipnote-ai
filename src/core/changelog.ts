@@ -29,28 +29,32 @@ export class ChangelogGenerator {
 		// Check if it's a Git repository
 		const isGitRepo = await this.gitService.isGitRepository(workspacePath);
 		if (!isGitRepo) {
-			throw new Error('Current workspace is not a Git repository');
+			throw new Error('Not a Git repository');
 		}
 
-		// Merge options with config defaults
-		const mergedOptions = this.mergeWithDefaults(options);
+		// Get commits based on options
+		const commits = await this.getFilteredCommits(workspacePath, options);
 
-		// Get commits
-		const commits = await this.getFilteredCommits(workspacePath, mergedOptions);
+		return this.generateChangelogFromCommits(commits, options);
+	}
+
+	/**
+	 * Generate changelog from existing commits
+	 */
+	async generateChangelogFromCommits(commits: CommitInfo[], options: GenerateOptions = {}): Promise<string> {
 		if (commits.length === 0) {
-			throw new Error('No commits found in the specified range');
+			return 'No commits found.';
 		}
 
-		// Process commits with AI
+		// Process commits through AI service
 		const entries = await this.openaiService.processCommits(commits);
 
-		// Filter by included types
-		const filteredEntries = this.filterEntriesByType(entries, mergedOptions.includeTypes || []);
+		// Filter entries if needed
+		const includeTypes = options.includeTypes || this.configService.getIncludeCommitTypes();
+		const filteredEntries = this.filterEntriesByType(entries, includeTypes);
 
-		// Generate the changelog markdown
-		const changelog = await this.formatChangelog(filteredEntries, mergedOptions);
-
-		return changelog;
+		// Format the changelog
+		return this.formatChangelog(filteredEntries, options);
 	}
 
 	/**

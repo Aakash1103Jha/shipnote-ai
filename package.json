@@ -56,6 +56,21 @@
         "command": "shipnote-ai.getStyleRecommendation",
         "title": "Get Writing Style Recommendation",
         "category": "ShipNote AI"
+      },
+      {
+        "command": "shipnote-ai.compareBranches",
+        "title": "Compare Branches",
+        "category": "ShipNote AI"
+      },
+      {
+        "command": "shipnote-ai.compareCurrentBranchToMaster",
+        "title": "Compare Current Branch to Master",
+        "category": "ShipNote AI"
+      },
+      {
+        "command": "shipnote-ai.generatePRChangelog",
+        "title": "Generate PR Changelog",
+        "category": "ShipNote AI"
       }
     ],
     "configuration": {
@@ -112,6 +127,26 @@
           "type": "boolean",
           "default": false,
           "description": "Group changelog entries by author"
+        },
+        "shipnote-ai.defaultComparisonStrategy": {
+          "type": "string",
+          "enum": [
+            "one-way",
+            "symmetric",
+            "merge-base"
+          ],
+          "default": "one-way",
+          "description": "Default strategy for branch comparison"
+        },
+        "shipnote-ai.includeMergeCommits": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include merge commits in branch comparisons"
+        },
+        "shipnote-ai.defaultBaseBranch": {
+          "type": "string",
+          "default": "master",
+          "description": "Default base branch for comparisons (master, main, develop, etc.)"
         }
       }
     },

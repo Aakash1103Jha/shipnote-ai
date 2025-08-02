@@ -37,7 +37,7 @@
 - Users can now sign in securely and manage their account settings
 ```
 
-> 📚 **For detailed style guidance**: See our complete **[Writing Style Guide](writing-style-guide.md)** with examples, best practices, and style selection criteria.
+> 📚 **For detailed style guidance**: See our complete **[Writing Style Guide](../features/writing-style-guide.md)** with examples, best practices, and style selection criteria.
 
 ## Quick Generation Options
 

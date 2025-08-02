@@ -5,6 +5,10 @@ import { ChangelogGenerator } from '@/core/changelog';
 import { ConfigService } from '@/config/config';
 import { ChangelogWebviewProvider } from '@/webview/ChangelogWebviewProvider';
 import { StyleRecommendationService } from '@/core/styleRecommendation';
+import { promisify } from 'util';
+import { exec } from 'child_process';
+
+const execAsync = promisify(exec);
 
 export function activate(context: vscode.ExtensionContext) {
 	console.log('ShipNote AI Changelog Generator is now active!');
@@ -408,13 +412,297 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	);
 
+	// Branch comparison commands
+	const compareBranchesCommand = vscode.commands.registerCommand(
+		'shipnote-ai.compareBranches',
+		async () => {
+			try {
+				const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
+				if (!workspaceFolder) {
+					vscode.window.showErrorMessage('No workspace folder found');
+					return;
+				}
+
+				// Get list of branches
+				const branches = await gitService.getBranches(workspaceFolder.uri.fsPath);
+				if (branches.length < 2) {
+					vscode.window.showWarningMessage('At least 2 branches are required for comparison');
+					return;
+				}
+
+				// Select base branch
+				const baseBranch = await vscode.window.showQuickPick(
+					branches.map(branch => ({
+						label: branch.name,
+						description: branch.isRemote ? '(remote)' : '',
+						detail: branch.lastCommit ? `${branch.lastCommit.hash.slice(0, 8)} - ${branch.lastCommit.message}` : 'No commit info'
+					})),
+					{
+						placeHolder: 'Select base branch',
+						title: 'Choose Base Branch'
+					}
+				);
+
+				if (!baseBranch) {
+					return;
+				}
+
+				// Select target branch (exclude base branch)
+				const targetBranches = branches.filter(b => b.name !== baseBranch.label);
+				const targetBranch = await vscode.window.showQuickPick(
+					targetBranches.map(branch => ({
+						label: branch.name,
+						description: branch.isRemote ? '(remote)' : '',
+						detail: branch.lastCommit ? `${branch.lastCommit.hash.slice(0, 8)} - ${branch.lastCommit.message}` : 'No commit info'
+					})),
+					{
+						placeHolder: 'Select target branch to compare',
+						title: 'Choose Target Branch'
+					}
+				);
+
+				if (!targetBranch) {
+					return;
+				}
+
+				// Select comparison strategy
+				const strategy = await vscode.window.showQuickPick([
+					{
+						label: 'one-way',
+						description: 'Show commits in target that are not in base',
+						detail: 'Commits unique to target branch'
+					},
+					{
+						label: 'symmetric',
+						description: 'Show commits unique to both branches',
+						detail: 'All unique commits from both branches'
+					},
+					{
+						label: 'merge-base',
+						description: 'Show commits since common ancestor',
+						detail: 'All commits since branches diverged'
+					}
+				], {
+					placeHolder: 'Select comparison strategy',
+					title: 'How should branches be compared?'
+				});
+
+				if (!strategy) {
+					return;
+				}
+
+				vscode.window.withProgress({
+					location: vscode.ProgressLocation.Notification,
+					title: 'Generating branch comparison changelog...',
+					cancellable: false
+				}, async () => {
+					const commits = await gitService.getCommitsBetweenBranches(
+						workspaceFolder.uri.fsPath,
+						baseBranch.label,
+						targetBranch.label,
+						{
+							fromBranch: baseBranch.label,
+							toBranch: targetBranch.label,
+							strategy: strategy.label as any
+						}
+					);
+
+					const changelog = await changelogGenerator.generateChangelogFromCommits(commits);
+
+					// Show changelog in a new document
+					const doc = await vscode.workspace.openTextDocument({
+						content: `# Branch Comparison: ${baseBranch.label} → ${targetBranch.label}\n\nStrategy: ${strategy.label} (${commits.length} commits)\n\n${changelog}`,
+						language: 'markdown'
+					});
+					await vscode.window.showTextDocument(doc);
+				});
+
+			} catch (error) {
+				console.error('Error comparing branches:', error);
+				vscode.window.showErrorMessage(
+					`Failed to compare branches: ${error instanceof Error ? error.message : 'Unknown error'}`
+				);
+			}
+		}
+	);
+
+	const compareCurrentBranchToMasterCommand = vscode.commands.registerCommand(
+		'shipnote-ai.compareCurrentBranchToMaster',
+		async () => {
+			try {
+				const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
+				if (!workspaceFolder) {
+					vscode.window.showErrorMessage('No workspace folder found');
+					return;
+				}
+
+				// Get current branch
+				const { stdout: currentBranchOutput } = await execAsync('git branch --show-current', { 
+					cwd: workspaceFolder.uri.fsPath 
+				});
+				const currentBranch = currentBranchOutput.trim();
+				
+				if (!currentBranch) {
+					vscode.window.showErrorMessage('Could not determine current branch');
+					return;
+				}
+
+				// Get default base branch from config
+				const config = vscode.workspace.getConfiguration('shipnote-ai');
+				const defaultBaseBranch = config.get<string>('defaultBaseBranch', 'master');
+
+				// Check if base branch exists
+				const baseBranchExists = await gitService.branchExists(workspaceFolder.uri.fsPath, defaultBaseBranch);
+				let actualBaseBranch = defaultBaseBranch;
+				
+				if (!baseBranchExists) {
+					// Try 'main' if 'master' doesn't exist
+					const mainExists = await gitService.branchExists(workspaceFolder.uri.fsPath, 'main');
+					if (mainExists) {
+						actualBaseBranch = 'main';
+					} else {
+						vscode.window.showErrorMessage(
+							`Neither '${defaultBaseBranch}' nor 'main' branch exists`
+						);
+						return;
+					}
+				}
+
+				vscode.window.withProgress({
+					location: vscode.ProgressLocation.Notification,
+					title: `Comparing ${currentBranch} to ${actualBaseBranch}...`,
+					cancellable: false
+				}, async () => {
+					const commits = await gitService.getCommitsBetweenBranches(
+						workspaceFolder.uri.fsPath,
+						actualBaseBranch,
+						currentBranch,
+						{
+							fromBranch: actualBaseBranch,
+							toBranch: currentBranch,
+							strategy: config.get('defaultComparisonStrategy', 'one-way') as any
+						}
+					);
+
+					const changelog = await changelogGenerator.generateChangelogFromCommits(commits);
+
+					// Show changelog in a new document
+					const doc = await vscode.workspace.openTextDocument({
+						content: `# ${currentBranch} → ${actualBaseBranch}\n\n${commits.length} commits ahead\n\n${changelog}`,
+						language: 'markdown'
+					});
+					await vscode.window.showTextDocument(doc);
+				});
+
+			} catch (error) {
+				console.error('Error comparing current branch:', error);
+				vscode.window.showErrorMessage(
+					`Failed to compare current branch: ${error instanceof Error ? error.message : 'Unknown error'}`
+				);
+			}
+		}
+	);
+
+	const generatePRChangelogCommand = vscode.commands.registerCommand(
+		'shipnote-ai.generatePRChangelog',
+		async () => {
+			try {
+				const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
+				if (!workspaceFolder) {
+					vscode.window.showErrorMessage('No workspace folder found');
+					return;
+				}
+
+				// Get current branch
+				const { stdout: currentBranchOutput } = await execAsync('git branch --show-current', { 
+					cwd: workspaceFolder.uri.fsPath 
+				});
+				const currentBranch = currentBranchOutput.trim();
+				
+				if (!currentBranch) {
+					vscode.window.showErrorMessage('Could not determine current branch');
+					return;
+				}
+
+				// Get branches for selection
+				const branches = await gitService.getBranches(workspaceFolder.uri.fsPath);
+				const config = vscode.workspace.getConfiguration('shipnote-ai');
+				const defaultBaseBranch = config.get<string>('defaultBaseBranch', 'master');
+				
+				const baseBranch = await vscode.window.showQuickPick(
+					branches
+						.filter(b => b.name !== currentBranch && !b.isRemote)
+						.map(branch => ({
+							label: branch.name,
+							description: branch.name === defaultBaseBranch ? '(default)' : '',
+							detail: branch.lastCommit ? `${branch.lastCommit.hash.slice(0, 8)} - ${branch.lastCommit.message}` : 'No commit info'
+						})),
+					{
+						placeHolder: `Select base branch for PR (default: ${defaultBaseBranch})`,
+						title: 'Choose PR Base Branch'
+					}
+				);
+
+				const targetBaseBranch = baseBranch?.label || defaultBaseBranch;
+
+				vscode.window.withProgress({
+					location: vscode.ProgressLocation.Notification,
+					title: 'Generating PR changelog...',
+					cancellable: false
+				}, async () => {
+					const commits = await gitService.getCommitsBetweenBranches(
+						workspaceFolder.uri.fsPath,
+						targetBaseBranch,
+						currentBranch,
+						{
+							fromBranch: targetBaseBranch,
+							toBranch: currentBranch,
+							strategy: 'one-way' // PRs typically show only commits ahead
+						}
+					);
+
+					if (commits.length === 0) {
+						vscode.window.showInformationMessage(
+							`No commits found between ${targetBaseBranch} and ${currentBranch}`
+						);
+						return;
+					}
+
+					const changelog = await changelogGenerator.generateChangelogFromCommits(commits);
+
+					// Show changelog in a new document
+					const doc = await vscode.workspace.openTextDocument({
+						content: `# Pull Request: ${currentBranch}\n\n${commits.length} commits to merge into ${targetBaseBranch}\n\n${changelog}`,
+						language: 'markdown'
+					});
+					await vscode.window.showTextDocument(doc);
+
+					// Also copy to clipboard for easy pasting
+					await vscode.env.clipboard.writeText(changelog);
+					vscode.window.showInformationMessage(
+						'PR changelog generated and copied to clipboard!'
+					);
+				});
+
+			} catch (error) {
+				console.error('Error generating PR changelog:', error);
+				vscode.window.showErrorMessage(
+					`Failed to generate PR changelog: ${error instanceof Error ? error.message : 'Unknown error'}`
+				);
+			}
+		}
+	);
+
 	// Register all commands
 	context.subscriptions.push(
 		generateChangelogCommand,
 		setOpenAIKeyCommand,
 		configureCommitRangeCommand,
 		openChangelogPanelCommand,
-		getStyleRecommendationCommand
+		getStyleRecommendationCommand,
+		compareBranchesCommand,
+		compareCurrentBranchToMasterCommand,
+		generatePRChangelogCommand
 	);
 
 	// Show welcome message on first activation

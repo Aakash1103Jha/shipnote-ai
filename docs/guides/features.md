@@ -8,7 +8,7 @@ Get AI-powered recommendations for the perfect changelog style based on your pro
 
 Our AI analyzes your `package.json`, file patterns, and commit history to suggest the best style automatically.
 
-> 📚 **Learn more**: Check out our comprehensive **[Writing Style Guide](writing-style-guide.md)** for detailed examples and selection criteria.
+> 📚 **Learn more**: Check out our comprehensive **[Writing Style Guide](../features/writing-style-guide.md)** for detailed examples and selection criteria.
 
 ## 🧠 AI-Powered Commit Enhancement
 - Transforms cryptic commit messages like "fix stuff" into clear, professional descriptions
