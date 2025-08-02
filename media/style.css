@@ -1,0 +1,212 @@
+body {
+    font-family: var(--vscode-font-family);
+    font-size: var(--vscode-font-size);
+    color: var(--vscode-foreground);
+    background-color: var(--vscode-editor-background);
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+h2, h3, h4 {
+    color: var(--vscode-foreground);
+    margin-top: 0;
+}
+
+h2 {
+    border-bottom: 1px solid var(--vscode-panel-border);
+    padding-bottom: 10px;
+}
+
+.section {
+    margin-bottom: 30px;
+    padding: 15px;
+    border: 1px solid var(--vscode-panel-border);
+    border-radius: 5px;
+    background-color: var(--vscode-editor-background);
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: var(--vscode-input-foreground);
+}
+
+.form-group input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+input, select {
+    width: 100%;
+    padding: 8px;
+    background-color: var(--vscode-input-background);
+    color: var(--vscode-input-foreground);
+    border: 1px solid var(--vscode-input-border);
+    border-radius: 3px;
+    font-family: inherit;
+    font-size: inherit;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: var(--vscode-focusBorder);
+}
+
+input[type="checkbox"] {
+    width: auto;
+}
+
+.range-config {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: var(--vscode-editor-inactiveSelectionBackground);
+    border-radius: 3px;
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.button {
+    flex: 1;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.button.primary {
+    background-color: var(--vscode-button-background);
+    color: var(--vscode-button-foreground);
+}
+
+.button.primary:hover {
+    background-color: var(--vscode-button-hoverBackground);
+}
+
+.button.secondary {
+    background-color: var(--vscode-button-secondaryBackground);
+    color: var(--vscode-button-secondaryForeground);
+}
+
+.button.secondary:hover {
+    background-color: var(--vscode-button-secondaryHoverBackground);
+}
+
+.button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.loading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px;
+    background-color: var(--vscode-editor-inactiveSelectionBackground);
+    border-radius: 3px;
+}
+
+.spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--vscode-progressBar-background);
+    border-top: 2px solid var(--vscode-button-background);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.error {
+    padding: 15px;
+    background-color: var(--vscode-inputValidation-errorBackground);
+    color: var(--vscode-inputValidation-errorForeground);
+    border: 1px solid var(--vscode-inputValidation-errorBorder);
+    border-radius: 3px;
+    margin-bottom: 15px;
+}
+
+.preview {
+    margin-top: 15px;
+}
+
+.preview h4 {
+    margin-bottom: 10px;
+}
+
+#previewContent {
+    background-color: var(--vscode-textCodeBlock-background);
+    color: var(--vscode-foreground);
+    padding: 15px;
+    border-radius: 3px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid var(--vscode-panel-border);
+    font-family: var(--vscode-editor-font-family);
+    font-size: var(--vscode-editor-font-size);
+    line-height: 1.4;
+}
+
+/* Scrollbar styling for webkit browsers */
+#previewContent::-webkit-scrollbar {
+    width: 8px;
+}
+
+#previewContent::-webkit-scrollbar-track {
+    background-color: var(--vscode-scrollbarSlider-background);
+}
+
+#previewContent::-webkit-scrollbar-thumb {
+    background-color: var(--vscode-scrollbarSlider-activeBackground);
+    border-radius: 4px;
+}
+
+#previewContent::-webkit-scrollbar-thumb:hover {
+    background-color: var(--vscode-scrollbarSlider-hoverBackground);
+}
+
+/* Success message styling */
+.success {
+    padding: 15px;
+    background-color: var(--vscode-testing-iconPassed);
+    color: var(--vscode-foreground);
+    border-radius: 3px;
+    margin-bottom: 15px;
+    opacity: 0.1;
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+    .container {
+        padding: 10px;
+    }
+    
+    .button-group {
+        flex-direction: column;
+    }
+    
+    .button {
+        flex: none;
+    }
+}

@@ -1,0 +1,148 @@
+{
+  "name": "shipnote-ai",
+  "displayName": "AI Changelog Generator",
+  "description": "AI-powered changelog generator that creates clean, categorized changelogs from Git commits and diffs",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.102.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "changelog",
+    "git",
+    "ai",
+    "commit",
+    "release",
+    "openai"
+  ],
+  "publisher": "shipnote",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shipnote/ai-changelog-generator"
+  },
+  "activationEvents": [],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "shipnote-ai.generateChangelog",
+        "title": "Generate Changelog",
+        "category": "ShipNote AI"
+      },
+      {
+        "command": "shipnote-ai.setOpenAIKey",
+        "title": "Set OpenAI API Key",
+        "category": "ShipNote AI"
+      },
+      {
+        "command": "shipnote-ai.configureCommitRange",
+        "title": "Configure Commit Range",
+        "category": "ShipNote AI"
+      },
+      {
+        "command": "shipnote-ai.openChangelogPanel",
+        "title": "Open Changelog Panel",
+        "category": "ShipNote AI"
+      }
+    ],
+    "configuration": {
+      "title": "ShipNote AI Changelog Generator",
+      "properties": {
+        "shipnote-ai.defaultCommitCount": {
+          "type": "number",
+          "default": 10,
+          "description": "Default number of commits to include when generating changelog"
+        },
+        "shipnote-ai.changelogStyle": {
+          "type": "string",
+          "enum": [
+            "formal",
+            "dev-friendly",
+            "pm-style"
+          ],
+          "default": "dev-friendly",
+          "description": "Style for the generated changelog"
+        },
+        "shipnote-ai.outputFileName": {
+          "type": "string",
+          "default": "CHANGELOG.md",
+          "description": "Default filename for changelog output"
+        },
+        "shipnote-ai.includeCommitTypes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "feat",
+              "fix",
+              "docs",
+              "refactor",
+              "style",
+              "test",
+              "chore"
+            ]
+          },
+          "default": [
+            "feat",
+            "fix",
+            "docs",
+            "refactor"
+          ],
+          "description": "Commit types to include in changelog"
+        },
+        "shipnote-ai.skipFormattingCommits": {
+          "type": "boolean",
+          "default": true,
+          "description": "Skip commits that only contain formatting changes"
+        },
+        "shipnote-ai.groupByAuthor": {
+          "type": "boolean",
+          "default": false,
+          "description": "Group changelog entries by author"
+        }
+      }
+    },
+    "views": {
+      "explorer": [
+        {
+          "id": "shipnote-ai.changelogView",
+          "name": "ShipNote AI",
+          "when": "workspaceHasGitRepo",
+          "icon": "$(git-branch)"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "npm run check-types && npm run lint && node esbuild.js",
+    "watch": "npm-run-all -p watch:*",
+    "watch:esbuild": "node esbuild.js --watch",
+    "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
+    "package": "npm run check-types && npm run lint && node esbuild.js --production",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "check-types": "tsc --noEmit",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.10",
+    "@types/node": "20.x",
+    "@types/vscode": "^1.102.0",
+    "@typescript-eslint/eslint-plugin": "^8.31.1",
+    "@typescript-eslint/parser": "^8.31.1",
+    "@vscode/test-cli": "^0.0.11",
+    "@vscode/test-electron": "^2.5.2",
+    "esbuild": "^0.25.3",
+    "eslint": "^9.25.1",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "openai": "^5.11.0"
+  }
+}
